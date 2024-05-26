@@ -5,10 +5,13 @@ from ..models import User
 from .forms import LoginForm
 
 #implementacion del formulario
+#Endpoint que resuelve el inicio de sesion
+#de un usuario.
 @auth.route('/login',methods=['GET','POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
+        #buscar si el email proporcionado existe
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
             #Si las credenciales son correctas logear el usuario
