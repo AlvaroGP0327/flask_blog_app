@@ -2,6 +2,7 @@ Implementacion de autenticacion de usuario en Flask
 Se requiere.
     1-Que el password en el objeto que representa al
     usuario este hasheado.
+    se implementa en la clase User
         from werkzeug.security import generate_password_hash,
         check_password_hash.
     
@@ -12,10 +13,16 @@ Se requiere.
         Este estado se guarda en la user session.
         La clase usuario debe heredar de UserMixin
         Se debe inicializar flask-login en la aplication factory.
+        from flask_login import LoginManager
+        login_manager= LoginManager()
+        login_manager.login_view = 'endpointdellogin'
+        login_manager.init(app)
 
-    3- se requiere generar y otorgar permisos.
-    4- tener funcionalidades restringidas o protegidas.
-
+    3- En el archivo models importar la instancia login_manager
+        y crear la funcion 
+        @login_manager.user_loader
+        load_user(user_id).
+    4- Proteger la ruta con @login_required
 
 **Extensiones
     -Flask-Login:Proceso de suministrar credenciales por
