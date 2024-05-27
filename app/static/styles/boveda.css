@@ -1,0 +1,139 @@
+/* Estilos generales */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: radial-gradient(circle, #f1f8e9, #e0f2f1);
+    overflow: hidden;
+}
+
+/* Contenedor principal */
+.container {
+    background-color: #fff;
+    border: 2px solid #2e7d32;
+    border-radius: 15px;
+    padding: 20px 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
+    max-width: 500px;
+    width: 90%;
+    z-index: 1;
+}
+
+/* Título */
+h1 {
+    color: #1b5e20;
+    margin-bottom: 10px;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px #555;
+}
+
+/* Decoraciones */
+.dollar-symbol {
+    position: absolute;
+    font-size: 3em;
+    color: #ffd700;
+    opacity: 0.2;
+}
+
+.dollar-symbol.top-left {
+    top: -10px;
+    left: -10px;
+}
+
+.dollar-symbol.top-right {
+    top: -10px;
+    right: -10px;
+}
+
+.dollar-symbol.bottom-left {
+    bottom: -10px;
+    left: -10px;
+}
+
+.dollar-symbol.bottom-right {
+    bottom: -10px;
+    right: -10px;
+}
+
+/* Texto */
+p {
+    color: #4e342e;
+    font-size: 1.2em;
+    margin-top: 0;
+}
+
+/* Figuras flotantes */
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+}
+
+.bill, .coin {
+    position: absolute;
+    opacity: 0.5;
+    z-index: 0;
+    animation: float 5s infinite ease-in-out;
+}
+
+/* Billetes */
+.bill {
+    width: 100px;
+    height: 50px;
+    background-color: #2e7d32;
+    border: 2px solid #1b5e20;
+    border-radius: 5px;
+}
+
+.bill.one {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.bill.two {
+    top: 40%;
+    left: 80%;
+    animation-delay: 1s;
+}
+
+.bill.three {
+    top: 70%;
+    left: 30%;
+    animation-delay: 2s;
+}
+
+/* Monedas */
+.coin {
+    width: 50px;
+    height: 50px;
+    background-color: #ffd700;
+    border: 2px solid #b8860b;
+    border-radius: 50%;
+}
+
+.coin.one {
+    top: 10%;
+    left: 70%;
+    animation-delay: 0.5s;
+}
+
+.coin.two {
+    top: 50%;
+    left: 20%;
+    animation-delay: 1.5s;
+}
+
+.coin.three {
+    top: 80%;
+    left: 50%;
+    animation-delay: 2.5s;
+}
