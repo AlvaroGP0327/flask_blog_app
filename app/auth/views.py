@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash
 from flask_login import login_user, logout_user, login_required
 from . import auth
 from ..models import User
-from .forms import LoginForm
+from .forms import LoginForm, RegistrationForm
 
 #implementacion del formulario inicio de sesion
 @auth.route('/login',methods=['GET','POST'])
@@ -39,3 +39,8 @@ def login():
 def logout():
     flash('Se ha deslogeado con exito')
     return redirect(url_for('main.index'))
+
+@auth.route('/register',methods=['GET','POST'])
+def register():
+    form = RegistrationForm()
+    return render_template('register.html',form=form)

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="/static/styles/register.css">
+</head>
+<body>
+    <h2>Register</h2>
+    <form method="POST" action="{{ url_for('auth.register') }}">
+        {{ form.hidden_tag() }}
+        
+        <div>
+            {{ form.email.label }}<br>
+            {{ form.email(size=32, placeholder="Enter your email") }}<br>
+            {% for error in form.email.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        
+        <div>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32, placeholder="Choose a username") }}<br>
+            {% for error in form.username.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        
+        <div>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32, placeholder="Enter your password") }}<br>
+            {% for error in form.password.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        
+        <div>
+            {{ form.password2.label }}<br>
+            {{ form.password2(size=32, placeholder="Confirm your password") }}<br>
+            {% for error in form.password2.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        
+        <div>
+            {{ form.submit }}
+        </div>
+    </form>
+</body>
+</html>
