@@ -1,0 +1,203 @@
+ALGORITMO PARA CREAR UNA APLICACION WEB EN FLASK
+
+    1-Construir la estructura de archivos y carpetas
+    2-Instalar Flask y sus extensiones basicas.
+    3-Construir el archivo config.py
+    4-Construir en el archivo app/__init__.py (aplication factory).
+    4-Dentro de app construir las blueprints que requiero para
+    hacer mi aplicacion web.
+    5-En el archivo __init__.py de cada blueprint construirla.
+    6-Dentro de la carpeta de cada blueprint construir las vistas,
+    formularios, errores y lo que se requiera.
+
+Una aplicacion en flask funciona bajo el protocolo WSGI
+lo que quiere decir que todas las request que recibe el
+servidor pasan a traves de un objeto que es una instancia de
+la aplicacion Flask.
+La aplicacion Flask recibe las solicitudes desde el navegador
+y se encarga de mapear la ruta solicitada con la funcion asociada.
+Lo hace mediante el decorador @app.route que envuelve la funcion.
+
+**Lanzar la aplicacion: flask --app run {nombrearchivo} --reload
+dentro de una sesion interactiva de flask
+importar la aplicacion principal y hacer app.url_map
+para mostrar un diccionario con todos los endpoints de la aplicacion
+
+En terminos generales Flask encapsula las solicitudes HTTP hechas
+por el cliente en un objeto request. Que proporciona metodos y atributos
+para acceder y manipular el contenido del formulario HTTP enviado por el cliente.
+
+**Request Hooks: son decoradores que cumplen la funcion de middlewares.
+Son necesarios para ejecutar codigo (establecer una conexion a una db,
+validar un usuario,autenticar un usuario, otorgar cookies)
+antes o despues de que una solicitud sea procesada (entre a la funcion).
+Para esto, Flask permite registrar funciones para ser llamadas antes o
+despues de procesar una solicitud.
+    
+    1-before_request
+    2-before_first_request
+    3-after_request
+    4-teardown_request
+
+**Responses
+Cuando Flask "llama" a una funcion, espera que se retorne una respuesta
+que en la mayoria de los casos sera enviada en formato string al cliente
+mediante un HTTP response.
+Las function views pueden retornar tres argumentos.
+    1-La respuesta de la funcion.
+    2-El codigo http.
+    3-Un diccionario con los headers de la respuesta.
+    4-Se puede implementar un response object con todo
+    el contenido de una respuesta del servidor la funcion
+    make_response() que toma como argumentos los valores que se quieran 
+    retornar desde la vista.
+    Un response tambien puede ser una redireccion.
+
+**Extensiones de Flask: flask esta disenado para ser extendido. Es decir
+que algunas funcionalidades extras que necesite nuestro servidor
+puedan ser implementadas con soluciones de terceros o nuestras.
+
+    1-Flask-SQLAlchemy: Integración de SQLAlchemy con Flask para manejar bases de datos.
+    2-Flask-Migrate: Soporte para migraciones de bases de datos con Alembic.
+    3-Flask-WTF: Integración de formularios WTForms con Flask.
+    4-Flask-Login: Manejo de autenticación de usuarios.
+    5-Flask-Mail: Envío de correos electrónicos desde una aplicación Flask.
+    6-Flask-RESTful: Creación de APIs REST.
+    7-Flask-Bootstrap: Integra el framework de diseño Bootstrap con aplicaciones Flask para un diseño responsivo. 
+    8-Flask-Caching: Implementa sistemas de caché para mejorar el rendimiento de las aplicaciones Flask.
+    9-Flask-SocketIO: Añade soporte para WebSockets en aplicaciones Flask, permitiendo comunicación en tiempo real.
+    10-Flask-CORS: Habilita Cross-Origin Resource Sharing (CORS) en aplicaciones Flask, permitiendo peticiones entre dominios.	
+
+**Templates(Jinja2)
+Se usa para trabajar sobre la logica de la presentacion,
+Y consiste en crear un archivo que contiene el texto de una respuesta
+con placeholders donde van las variables que se esten usando en
+el actual contexto.
+Entonces para propositos de entender esto del renderizado
+los archivos html en este contexto seran un archivos de tipo template.
+Donde voy a poder crear las templates para jinja2. Ya que en este archivo 
+se puede incluir codigo de programacion y variables.Cosa que en html no.
+Con esto las vistas al llamar dentro de ellas al metodo render_template('file_html',*args)
+va tomar la logica dentro del correspondiente archivo template y la va 
+implementar usando las variables que pasemos como segundo parametro de este metodo. 
+
+**Dates and Times flask-moment
+pip install flask-moment
+Es necesario manejar horas y fechas de nuestra aplicacion con base en UTC
+como cero absoluto. A partir de alli enviar al navegador un formato adecuado
+de fecha y hora para que este maneje teniendo en cuenta la ubicacion del cliente
+la forma adecuada de mostrar las fechas.
+
+**Web Forms
+pip install flask-wtf
+Se usa para renderizar formularios HTML junto con las validaciones para cada campo.
+Requiere de una SECRET_KEY para su configuracion.
+Los formularios se representan por medio de una clase que extiende de la clase FlaskForm.
+Cada atributo de la clase se representa por medio de un objeto y cada objeto
+puede tener varios validadores.Los validadores son una lista de funciones.
+
+**Redirect, User Sessions
+Como buena practica nunca dejar que la ultima solicitud que reciba nuestro
+servidor sea un POST.Para solucionar eso, a un POST se le debe responder con
+una redireccion en lugar de una respuesta normal.
+Para que el servidor recuerde datos del usuario entre peticiones se implementa
+la User Sessions que se alojan encriptadas en el lado del cliente.
+
+**Conexion a Base de Datos
+Se usa la extension pip install flask-sqlalchemy
+pip install psycopg2
+En sqlalchemy una base de datos esta representada
+como una URL de tipo string.
+'postgresql://username:password@hostname/nombre_database'
+
+-Configuracion de conexion con sqlite3
+base_dir_project = os.path.abspath(os.path.dirname(__file__))
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = \
+    'sqlite:///' + os.path.join(base_dir_project,'flask_web_data.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+Implementacion de autenticacion de usuario en Flask
+Se requiere.
+    1-Que el password en el objeto que representa al
+    usuario este hasheado.
+    se implementa en la clase User
+        from werkzeug.security import generate_password_hash,
+        check_password_hash.
+    
+    2- Se requiere saber si un usuario esta logeado o no.
+        pip install flask-login
+        esta extension se usa para manejar el estado de un 
+        usuario cuando esta navegando por nuestra aplicacion.
+        Este estado se guarda en la user session.
+        La clase usuario debe heredar de UserMixin
+        Se debe inicializar flask-login en la aplication factory.
+        from flask_login import LoginManager
+        login_manager= LoginManager()
+        login_manager.login_view = 'endpointdellogin'
+        login_manager.init(app)
+
+    3- En el archivo models importar la instancia login_manager
+        y crear la funcion 
+        @login_manager.user_loader
+        load_user(user_id).
+    4- Proteger la ruta con @login_required
+
+**Extensiones
+    -Flask-Login:Proceso de suministrar credenciales por
+    parte del usuario, y la aplicacion las verifica para
+    permitir el acceso a funcionalidades restringidas.
+    -Werkzeug: Hashear el password y verificarlo.
+    -itsdangerous: generar y verificar tokens.
+
+**Paquetes de proposito general
+    -Flask-Mail.
+    -Flask-Bootstrap
+    -Flask-wtf.
+
+Monolito de repaso de la parte I del libro Flask Web Development
+El request object contiene informacion enviada desde la peticion http
+atributos o metodos
+form: diccionario con la data enviada por el cliente en un formulario
+args: diccionario con los datos pasados como querys en la URL
+cookies: diccionario con las cookies
+headers: diccionario con los headers
+files:diccionario con los archivos subidos en la request.
+
+Un template es un archivo que contiene la parte de texto html,estilos
+y las variables de una respuesta. Y al proceso de reeemplazar las
+variables por los valores actuales del contexto de la peticion
+y retornarlos en una respuesta final se le llama renderizado.
+render_template('template.html',**args).
+
+flask-wtf proporciona las funcionalidades para manejar y renderizar
+formularios.Cada formulario se representa por medio de una clase.
+
+**Migraciones
+Resuelven el problema de que para actualizar una tabla dentro de una
+base de datos se debe destruir la tabla y volverla a crear. Ya que si
+la tabla existe el programa no la sobreescribe.
+El framework funciona como un sistema de control de versiones. Trackeando
+los cambios que se van produciendo en los modelos y dando la posibilidad
+de irlos agregando gradualmente a la base de datos.
+    pip install flask-migrate
+que es una interfaz de Alembic.
+Para trabajar en la sesion con la consola.
+flask db init
+flask db migrate -m "titulo del commit"
+flask db upgrade aplicar los cambios a la db.
+flask db downgrade.Sirve para quitar las migraciones de la zona preparacion.
+
+**Enviar mails desde la aplicacion
+Simple Mail Transfer Protocol (smtplib: libreria standar de python)
+pip install flask-mail
+configuracion:
+MAIL_SERVER: default localhost
+MAIL_PORT: 25 default
+MAIL_USERNAME
+MAIL_PASSWORD
+MAIL_USE_TLS
+MAIL_USE_SSL
+Es conveniente conectarse a un SMTP server para enviar los mails.
+Implementacion de autenticacion de usuario en Flask
+
